@@ -1,0 +1,30 @@
+server:
+  port: 8086
+  
+spring:
+  codec:
+    max-in-memory-size: 10MB
+    
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: "off"
+    
+  application:
+    name: UserService
+    
+  data:
+    mongodb:
+      uri: ${mongodb_url}
+      database: ${mongodb_database}
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone:  http://18.191.226.95:8761/eureka/
+      
+  instance:
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}:${server.port}
+    prefer-ip-address: true
+    ip-address: 13.59.82.196
