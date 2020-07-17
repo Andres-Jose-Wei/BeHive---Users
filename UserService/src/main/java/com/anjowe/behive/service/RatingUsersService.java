@@ -1,5 +1,7 @@
 package com.anjowe.behive.service;
 
-public interface RatingUsersService {
+import com.anjowe.behive.model.User;
 
+public interface RatingUsersService {
+	public boolean rateUser(User user);
 }

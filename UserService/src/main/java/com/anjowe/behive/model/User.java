@@ -1,5 +1,6 @@
 package com.anjowe.behive.model;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -48,14 +49,19 @@ private String firstName;
 private String lastName;
 
 /**
- * A user’s skills and their rating for each skill 
+ * A user’s skills and the ratings for each skill 
  */
-private Map<Skill, Rating> skillStats;
+private Map<Skill, List<Double>> skillRatings;
+
+/**
+ * A user’s skills and their average rating for each skill 
+ */
+private Map<Skill, Double> skillStats;
 
 /**
  * A user’s rating within the position
  */
-private Rating rating;
+private double rating;
 
 /**
  * A user’s position within a group
@@ -70,41 +76,46 @@ private Group group; // a user’s company or department
 /**
  * A user’s reviews from their superiors
  */
-private Map<User, Review> reviews; 
-
-/**
- * The number of times a user was awarded “Most Valuable Programmer” of their team after their project was completed
- */
-private Integer mvpCount;
+private Map<String, List<Review>> reviews; 
 
 /**
  * The percentage of how many times a user completed all their tasks on time
  */
-private Double punctuality;
+private double punctuality;
 
 /**
  * The number of reviews for a user
  */
-private Integer reviewsCount;
+private int reviewsCount;
 
 /**
  * The number of unique reviewers for a user
  */
-private Integer uniqueReviewersCount;
-
-/**
- * The number of projects a user worked on
- */
-private Integer projectCount;
+private int uniqueReviewersCount;
 
 /**
  * The average number of tasks a user completes per project
  */
-private Double avgTasks;
+private double avgTasks;
 
 /**
  * The average number of days it takes a user to complete a task 
  */
-private Integer avgTaskDuration;
+private int avgTaskDuration;
+
+/**
+ * The number of times a user was awarded “Most Valuable Programmer” of their team after their project was completed
+ */
+private int mvpCount;
+
+/**
+ * The number of projects a user worked on
+ */
+private int projectCount;
+
+/**
+ * Whether or not a user is already working on a project
+ */
+private boolean isAvailable;
 
 }

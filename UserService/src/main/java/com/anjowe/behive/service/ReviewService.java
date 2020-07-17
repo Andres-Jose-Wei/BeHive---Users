@@ -4,9 +4,12 @@ import com.anjowe.behive.model.Review;
 
 public interface ReviewService {
 
-	public boolean createOrSaveReview(Review review);
+	public boolean addReview(String usernameReviewee, String usernameReviewer, Review review);
+	
+	public boolean updateReview(String usernameReviewee, String usernameReviewer, Review review);
+	
+	public boolean countReviews(String username);
+	
+	public boolean countUniqueReviewers(String username);
 
-	public boolean deleteReview(Review review);
-
-	public boolean updateReview(Review review);
 }
