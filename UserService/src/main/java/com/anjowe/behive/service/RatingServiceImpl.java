@@ -8,16 +8,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.anjowe.behive.model.Skill;
 import com.anjowe.behive.model.User;
+import com.anjowe.behive.repo.UserRepo;
 
 public class RatingServiceImpl implements RatingService {
 
 	private UserService userService;
-
+	
+	private UserRepo userRepo;
+	
+	@Autowired
+	public void setUserRepo(UserRepo userRepo) {
+		this.userRepo = userRepo;
+	}
+	
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-
+	
+	private int maxProjectCount = userRepo.findFirstByOrderByProjectCountDesc().getProjectCount();
+	
+	private int maxUniqueReviewersCount = userRepo.findFirstByOrderByUniqueReviewersCountDesc().getUniqueReviewersCount();
+	
+	private int maxMvpCount = userRepo.findFirstByOrderByMvpCountDesc().getMvpCount();
+	
 	@Override
 	public boolean rateUserSkills(String username, Map<String, Double> skillRating) {
 		User user = userService.getUser(username);
@@ -36,12 +50,15 @@ public class RatingServiceImpl implements RatingService {
 			user.getSkillStats().put(new Skill(key), avg);
 			sumOfStats += avg;
 		}
-		user.setTechnicalSkillAvg((user.getProjectCount() + sumOfStats) / (user.getSkillStats().size() + 1));
+		user.setTechnicalSkillAvg(((user.getProjectCount()/maxProjectCount)*100 + sumOfStats) / (user.getSkillStats().size() + 1));
 		userService.updateUser(user);
 		return true;
 	}
 
 	public boolean ratePersonalSkills(String username, double punctuality) {
+		User user = userService.getUser(username);
+		user.setPersonalSkillAvg((user.getUniqueReviewersCount()/maxUniqueReviewersCount)*100 + punctuality + (user.getMvpCount()/maxMvpCount)*100);
+		userService.updateUser(user);
 		return true;
 	}
 
@@ -50,5 +67,9 @@ public class RatingServiceImpl implements RatingService {
 		user.setOverallRating((user.getTechnicalSkillAvg() + user.getPersonalSkillAvg()) / 2);
 		return true;
 	}
+
+
+
+
 
 }
