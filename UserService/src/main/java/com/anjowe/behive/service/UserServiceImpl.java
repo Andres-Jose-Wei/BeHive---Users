@@ -1,17 +1,19 @@
 package com.anjowe.behive.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.User;
 import com.anjowe.behive.repo.UserRepo;
 
 import reactor.core.publisher.Mono;
 
+@Service
 public class UserServiceImpl implements UserService {
-	
+
 	User user = new User();
 	private UserRepo userRepo;
-	
+
 	@Autowired
 	public void setUserRepo(UserRepo userRepo) {
 		this.userRepo = userRepo;
