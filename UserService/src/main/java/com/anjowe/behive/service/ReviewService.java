@@ -6,8 +6,6 @@ public interface ReviewService {
 
 	public boolean addReview(String usernameReviewee, String usernameReviewer, Review review);
 	
-	public boolean updateReview(String usernameReviewee, String usernameReviewer, Review review);
-	
 	public boolean countReviews(String username);
 	
 	public boolean countUniqueReviewers(String username);

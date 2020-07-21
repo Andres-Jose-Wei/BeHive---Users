@@ -1,5 +1,6 @@
 package com.anjowe.behive.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Review;
 import com.anjowe.behive.model.User;
-import com.anjowe.behive.repo.UserRepo;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -24,17 +24,22 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public boolean addReview(String usernameReviewee, String usernameReviewer, Review review) {
 		User user = this.userService.getUser(usernameReviewee);
-		//TODO: Add a Review
-		return true;
+		if(user.getReviews()==null) {
+			Map<String, List<Review>> reviews = new HashMap<String, List<Review>>();
+			reviews.put(usernameReviewer, Arrays.asList(new Review[] {review}));
+			user.setReviews(reviews);
+			return this.userService.updateUser(user);
+		}else {
+			List<Review> tempReviewList = user.getReviews().get(usernameReviewer);
+			tempReviewList.add(review);
+			Map <String, List<Review>> tempReviewsMap = user.getReviews();
+			tempReviewsMap.put(usernameReviewer, tempReviewList);
+			this.userService.updateUser(user);
+			countUniqueReviewers(usernameReviewee);
+			return this.userService.updateUser(user);
+		}
 	}
-
-	@Override
-	public boolean updateReview(String usernameReviewee, String usernameReviewer, Review review) {
-		User user = this.userService.getUser(usernameReviewee);
-		//TODO: Update any Review
-		return true;
-	}
-
+	
 	@Override
 	public boolean countReviews(String username) {
 		User user = this.userService.getUser(username);

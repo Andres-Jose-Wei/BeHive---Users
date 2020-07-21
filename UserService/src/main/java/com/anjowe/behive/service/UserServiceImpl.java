@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.anjowe.behive.model.User;
 import com.anjowe.behive.repo.UserRepo;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -18,7 +19,12 @@ public class UserServiceImpl implements UserService {
 	public void setUserRepo(UserRepo userRepo) {
 		this.userRepo = userRepo;
 	}
-
+	
+	@Override
+	public Flux<User> getAllUsers() {
+		return this.userRepo.findAll();
+	}
+	
 	@Override
 	public User getUser(String username) {
 		Mono<User> userMono = userRepo.findById(username);

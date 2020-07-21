@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Position;
@@ -31,14 +31,14 @@ public class PositionController {
 		return positionService.getAllPositions();
 	}
 
-	@PostMapping("/position")
-	public boolean addPosition(@RequestParam("position") String position) {
-		return positionService.addPosition(new Position(position));
+	@PostMapping("/position/{positionName}")
+	public boolean adminAddPosition(@PathVariable("positionName") String positionName) {
+		return positionService.addPosition(new Position(positionName));
 	}
 
-	@DeleteMapping("/position")
-	public boolean getAllPositions(@RequestParam("position") String position) {
-		return positionService.deletePosition(new Position(position));
+	@DeleteMapping("/position/{positionName}")
+	public boolean adminDeletePosition(@PathVariable("positionName") String positionName) {
+		return positionService.deletePosition(new Position(positionName));
 	}
 
 }

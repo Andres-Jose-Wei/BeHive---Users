@@ -14,4 +14,8 @@ public interface PositionService {
 
 	public boolean deletePosition(Position position);
 
+	public boolean userAddPosition(Position position, String username);
+
+	public boolean userDeletePosition(Position position, String username);
+
 }

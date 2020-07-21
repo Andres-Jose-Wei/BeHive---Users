@@ -2,7 +2,11 @@ package com.anjowe.behive.service;
 
 import com.anjowe.behive.model.User;
 
+import reactor.core.publisher.Flux;
+
 public interface UserService {
+	
+	Flux<User> getAllUsers();
 	
 	public User getUser(String username);
 
