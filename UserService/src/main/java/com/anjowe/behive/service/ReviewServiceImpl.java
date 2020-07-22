@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Review;
-import com.anjowe.behive.model.User;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -23,43 +22,52 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	@Override
 	public boolean addReview(String usernameReviewee, String usernameReviewer, Review review) {
-		User user = this.userService.getUser(usernameReviewee);
-		if(user.getReviews()==null) {
-			Map<String, List<Review>> reviews = new HashMap<String, List<Review>>();
-			reviews.put(usernameReviewer, Arrays.asList(new Review[] {review}));
-			user.setReviews(reviews);
-			return this.userService.updateUser(user);
-		}else {
-			List<Review> tempReviewList = user.getReviews().get(usernameReviewer);
-			tempReviewList.add(review);
-			Map <String, List<Review>> tempReviewsMap = user.getReviews();
-			tempReviewsMap.put(usernameReviewer, tempReviewList);
-			this.userService.updateUser(user);
-			countUniqueReviewers(usernameReviewee);
-			return this.userService.updateUser(user);
-		}
+		this.userService.getUser(usernameReviewee).map(user -> {
+			if(user.getReviews()==null) {
+				Map<String, List<Review>> reviews = new HashMap<String, List<Review>>();
+				reviews.put(usernameReviewer, Arrays.asList(new Review[] {review}));
+				user.setReviews(reviews);
+				return this.userService.updateUser(user);
+			}else {
+				List<Review> tempReviewList = user.getReviews().get(usernameReviewer);
+				tempReviewList.add(review);
+				Map <String, List<Review>> tempReviewsMap = user.getReviews();
+				tempReviewsMap.put(usernameReviewer, tempReviewList);
+				this.userService.updateUser(user);
+				countUniqueReviewers(usernameReviewee);
+				this.userService.updateUser(user);
+				return true;
+			}
+		}).subscribe();
+		return true;
 	}
 	
 	@Override
 	public boolean countReviews(String username) {
-		User user = this.userService.getUser(username);
-		if(user.getReviews()==null) {
-			user.setReviews(new HashMap<String, List<Review>>());
-		}
-		for(String key: user.getReviews().keySet()) {
-			user.setReviewsCount(user.getReviewsCount()+user.getReviews().get(key).size());
-		}
-		return this.userService.updateUser(user);
+		this.userService.getUser(username).map(user -> {
+			if(user.getReviews()==null) {
+				user.setReviews(new HashMap<String, List<Review>>());
+			}
+			for(String key: user.getReviews().keySet()) {
+				user.setReviewsCount(user.getReviewsCount()+user.getReviews().get(key).size());
+			}
+			this.userService.updateUser(user);
+			return true;
+		}).subscribe();
+		return true;
 	}
 
 	@Override
 	public boolean countUniqueReviewers(String username) {
-		User user = this.userService.getUser(username);
+		this.userService.getUser(username).map(user ->{
 		if(user.getReviews()==null) {
 			user.setReviews(new HashMap<String, List<Review>>());
 		}
 		user.setUniqueReviewersCount(user.getReviews().keySet().size());
-		return this.userService.updateUser(user);
+		this.userService.updateUser(user);
+		return true;
+		}).subscribe();
+		return true;
 	}
 
 }

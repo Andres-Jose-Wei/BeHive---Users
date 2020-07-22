@@ -21,17 +21,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Document(collection = "User")
 public class User {
-
+	
 	/**
 	 * A user’s username
 	 */
 	@Id
 	private String username;
-
-	/**
-	 * A user’s password
-	 */
-	private String password;
 
 	/**
 	 * A user’s email

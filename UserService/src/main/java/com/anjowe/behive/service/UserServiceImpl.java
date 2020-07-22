@@ -26,28 +26,26 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User getUser(String username) {
-		Mono<User> userMono = userRepo.findById(username);
-		userMono.subscribe(u -> user = u);
-		return user;
+	public Mono<User> getUser(String username) {
+		return this.userRepo.findByUsername(username);
 	}
 
 	@Override
 	public boolean createOrSaveUser(User user) {
 		user.setAvailable(true);
-		this.userRepo.save(user);
+		this.userRepo.save(user).subscribe();
 		return true;
 	}
 
 	@Override
 	public boolean deleteUser(User user) {
-		this.userRepo.delete(user);
+		this.userRepo.delete(user).subscribe();
 		return true;
 	}
 
 	@Override
 	public boolean updateUser(User user) {
-		this.userRepo.save(user);
+		this.userRepo.save(user).subscribe();
 		return true;
 	}
 

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.anjowe.behive.model.Skill;
-import com.anjowe.behive.model.User;
 import com.anjowe.behive.repo.SkillsRepo;
 
 import reactor.core.publisher.Mono;
@@ -47,7 +46,7 @@ public class SkillsServiceImpl implements SkillsService {
 
 	@Override
 	public boolean userAddSkill(Skill skill, String username) {
-		User user = this.userService.getUser(username);
+		this.userService.getUser(username).map(user ->{
 		Map<Skill, List<Double>> tempSkillRatings = user.getSkillRatings();
 		Map<Skill, Double> tempSkillStats = user.getSkillStats();
 		tempSkillRatings.put(skill, new ArrayList<Double>());
@@ -58,19 +57,23 @@ public class SkillsServiceImpl implements SkillsService {
 		this.userService.updateUser(user);
 		System.out.println("User ("+username+"): updated");
 		return true;
+		}).subscribe();
+		
+		return true;
 	}
 
 	@Override
 	public boolean userDeleteSkill(Skill skill, String username) {
-		User user = this.userService.getUser(username);
-		Map<Skill, List<Double>> tempSkillRatings = user.getSkillRatings();
-		Map<Skill, Double> tempSkillStats = user.getSkillStats();
-		tempSkillRatings.remove(skill);
-		tempSkillStats.remove(skill);
-		this.userService.updateUser(user);
-		System.out.println("Skill ("+skill.toString()+"): deleted from User ("+username+")");
-		this.userService.updateUser(user);
-		System.out.println("User ("+username+"): updated");
+		this.userService.getUser(username).map(user -> {
+			Map<Skill, List<Double>> tempSkillRatings = user.getSkillRatings();
+			Map<Skill, Double> tempSkillStats = user.getSkillStats();
+			tempSkillRatings.remove(skill);
+			tempSkillStats.remove(skill);
+			this.userService.updateUser(user);
+			System.out.println("Skill ("+skill.toString()+"): deleted from User ("+username+")");
+			System.out.println("User ("+username+"): updated");
+			return true;
+		}).subscribe();
 		return true;
 	}
 

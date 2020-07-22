@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Group;
@@ -47,9 +48,15 @@ public class UserController {
 		this.skillsService = skillsService;
 	}
 	
+	
 	@GetMapping("/user")
 	public Flux<User> getAllUsers(){
 		return userService.getAllUsers();
+	}
+	
+	@PostMapping("/user")
+	public boolean registerUser(@RequestBody User user){
+		return userService.createOrSaveUser(user);
 	}
 	
 	@PostMapping("user/{username}/position/{positionName}")

@@ -3,12 +3,13 @@ package com.anjowe.behive.service;
 import com.anjowe.behive.model.User;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface UserService {
 	
 	Flux<User> getAllUsers();
 	
-	public User getUser(String username);
+	public Mono<User> getUser(String username);
 
 	public boolean createOrSaveUser(User user);
 

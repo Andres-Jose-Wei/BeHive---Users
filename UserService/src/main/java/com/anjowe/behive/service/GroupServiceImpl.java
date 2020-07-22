@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.anjowe.behive.model.Group;
-import com.anjowe.behive.model.User;
 import com.anjowe.behive.repo.GroupRepo;
 
 import reactor.core.publisher.Mono;
@@ -46,21 +45,27 @@ public class GroupServiceImpl implements GroupService {
 
 	@Override
 	public boolean userAddOrUpdateGroup(Group group, String username) {
-		User user = this.userService.getUser(username);
-		user.setGroup(group);
-		System.out.println("Group ("+group.toString()+"): updated/added to User ("+username+")");
-		this.userService.updateUser(user);
-		System.out.println("User ("+username+"): updated");
+		this.userService.getUser(username).map(user ->{
+			user.setGroup(group);
+			System.out.println("Group ("+group.toString()+"): updated/added to User ("+username+")");
+			this.userService.updateUser(user);
+			System.out.println("User ("+username+"): updated");
+			return true;
+		}).subscribe();
+		
 		return true;
 	}
 
 	@Override
 	public boolean userDeleteGroup(Group group, String username) {
-		User user = this.userService.getUser(username);
-		user.setGroup(null);
-		System.out.println("Group ("+group.toString()+"): deleted from User ("+username+")");
-		this.userService.updateUser(user);
-		System.out.println("User ("+username+"): updated");
+		this.userService.getUser(username).map(user ->{
+			user.setGroup(null);
+			System.out.println("Group ("+group.toString()+"): deleted from User ("+username+")");
+			this.userService.updateUser(user);
+			System.out.println("User ("+username+"): updated");
+			return true;
+		}).subscribe();
+		
 		return true;
 	}
 
