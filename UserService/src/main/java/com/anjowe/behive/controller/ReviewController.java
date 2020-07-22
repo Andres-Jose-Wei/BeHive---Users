@@ -11,7 +11,6 @@ import com.anjowe.behive.model.Review;
 import com.anjowe.behive.service.ReviewService;
 
 @RestController
-@CrossOrigin
 public class ReviewController {
 	private ReviewService reviewService;
 	

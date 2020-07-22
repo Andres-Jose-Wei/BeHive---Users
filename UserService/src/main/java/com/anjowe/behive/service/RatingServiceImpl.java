@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.anjowe.behive.model.Skill;
 import com.anjowe.behive.repo.UserRepo;
 
+@Service
 public class RatingServiceImpl implements RatingService {
 	
 	private int maxProjectCount;

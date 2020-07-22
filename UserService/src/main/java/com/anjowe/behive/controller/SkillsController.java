@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import com.anjowe.behive.service.SkillsService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin
 public class SkillsController {
 	private SkillsService skillsService;
 	
@@ -37,7 +37,7 @@ public class SkillsController {
 		return true;
 	}
 	
-	@PostMapping("/skill/{skillName}")
+	@DeleteMapping("/skill/{skillName}")
 	public boolean adminDeleteSkill(@RequestBody List<String> skills){
 		for(String skillName: skills) {
 			skillsService.deleteSkill(new Skill(skillName));

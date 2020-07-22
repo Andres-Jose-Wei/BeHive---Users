@@ -6,12 +6,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Skill;
 import com.anjowe.behive.repo.SkillsRepo;
 
 import reactor.core.publisher.Mono;
 
+@Service
 public class SkillsServiceImpl implements SkillsService {
 	private SkillsRepo skillsRepo;
 	private UserService userService;

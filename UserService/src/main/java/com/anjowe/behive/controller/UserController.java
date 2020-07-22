@@ -23,7 +23,6 @@ import com.anjowe.behive.service.UserService;
 import reactor.core.publisher.Flux;
 
 @RestController
-@CrossOrigin
 public class UserController {
 
 	private PositionService positionService;

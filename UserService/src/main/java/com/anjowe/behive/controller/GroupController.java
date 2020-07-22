@@ -16,7 +16,6 @@ import com.anjowe.behive.service.GroupService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin
 public class GroupController {
 	private GroupService groupService;
 	

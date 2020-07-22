@@ -28,8 +28,7 @@ public class UserQueue {
 	 */
 	@RabbitListener(queues = "${spring.rabbitmq.queue-listener}")
 	public void recievedMessage(User user) {
-		User newUser = user;
-		this.userService.createOrSaveUser(newUser);
+		this.userService.createOrSaveUser(user);
 	}
 	
 }

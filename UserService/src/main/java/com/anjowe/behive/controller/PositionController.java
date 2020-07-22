@@ -16,7 +16,6 @@ import com.anjowe.behive.service.PositionService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin
 public class PositionController {
 
 	private PositionService positionService;

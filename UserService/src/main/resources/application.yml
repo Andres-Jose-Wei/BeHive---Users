@@ -22,16 +22,4 @@ spring:
     port: ${rabbitmq_port}
     username: ${rabbitmq_username}
     password: ${rabbitmq_password}
-    queue-listener: ${rabbitmq_queue_listener:user_registration_queue}
-
-eureka:
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    service-url:
-      defaultZone:  http://18.191.226.95:8761/eureka/
-      
-  instance:
-    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}:${server.port}
-    prefer-ip-address: true
-    ip-address: 13.59.82.196
+    queue-listener: ${rabbitmq_queue_listener}

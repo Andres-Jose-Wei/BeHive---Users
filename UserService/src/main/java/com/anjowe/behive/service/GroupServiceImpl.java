@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Group;
 import com.anjowe.behive.repo.GroupRepo;
 
 import reactor.core.publisher.Mono;
 
+@Service
 public class GroupServiceImpl implements GroupService {
 	private GroupRepo groupRepo;
 	private UserService userService;
