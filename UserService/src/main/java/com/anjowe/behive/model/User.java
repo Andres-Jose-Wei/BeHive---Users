@@ -23,9 +23,14 @@ import lombok.ToString;
 public class User {
 	
 	/**
-	 * A user’s username
+	 * A user’s id
 	 */
 	@Id
+	private String id;
+	
+	/**
+	 * A user’s username
+	 */
 	private String username;
 
 	/**
