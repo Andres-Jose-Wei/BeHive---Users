@@ -1,5 +1,7 @@
 package com.anjowe.behive.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @CrossOrigin
 public class UserController {
+
 	private PositionService positionService;
 	private GroupService groupService;
 	private SkillsService skillsService;
@@ -54,11 +57,6 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
-	@PostMapping("/user")
-	public boolean registerUser(@RequestBody User user){
-		return userService.createOrSaveUser(user);
-	}
-	
 	@PostMapping("user/{username}/position/{positionName}")
 	public boolean userAddPosition(@PathVariable("positionName") String positionName, @PathVariable("username") String username) {
 		return positionService.userAddPosition(new Position(positionName), username);
@@ -79,14 +77,20 @@ public class UserController {
 		return groupService.userDeleteGroup(new Group(groupName), username);
 	}
 	
-	@PostMapping("user/{username}/skill/skillName}")
-	public boolean userAddSkill(@PathVariable("skillName") String skillName, @PathVariable("username") String username) {
-		return skillsService.userAddSkill(new Skill(skillName), username);
+	@PostMapping("user/{username}/skills")
+	public boolean userAddSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
+		for(String skillName: skills) {
+			skillsService.userAddSkill(new Skill(skillName), username);
+		}
+		return true;
 	}
 
-	@DeleteMapping("user/{username}/skill/{skillName}")
-	public boolean userDeleteSkill(@PathVariable("skillName") String skillName, @PathVariable("username") String username) {
-		return skillsService.userDeleteSkill(new Skill(skillName), username);
+	@DeleteMapping("user/{username}/skills")
+	public boolean userDeleteSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
+		for(String skillName: skills) {
+			skillsService.userDeleteSkill(new Skill(skillName), username);
+		}
+		return true;
 	}
 	
 	

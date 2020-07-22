@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Skill;
@@ -30,13 +30,19 @@ public class SkillsController {
 	}
 	
 	@PostMapping("/skill/{skillName}")
-	public boolean adminAddSkill(@PathVariable("skillName") String skillName){
-		return skillsService.addSkill(new Skill(skillName));
+	public boolean adminAddSkill(@RequestBody List<String> skills){
+		for(String skillName: skills) {
+			skillsService.addSkill(new Skill(skillName));
+		}
+		return true;
 	}
 	
 	@PostMapping("/skill/{skillName}")
-	public boolean adminDeleteSkill(@PathVariable("skillName") String skillName){
-		return skillsService.deleteSkill(new Skill(skillName));
+	public boolean adminDeleteSkill(@RequestBody List<String> skills){
+		for(String skillName: skills) {
+			skillsService.deleteSkill(new Skill(skillName));
+		}
+		return true;
 	}
 
 	

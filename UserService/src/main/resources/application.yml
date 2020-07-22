@@ -14,8 +14,15 @@ spring:
     
   data:
     mongodb:
-      uri: mongodb+srv://jcanela:*MisterTurkey212*@jcmongodb.472kc.mongodb.net/User?
-      database: User
+      uri: ${mongodb_url}
+      database: ${mongodb_database} 
+  
+  rabbitmq:
+    host: ${rabbitmq_host}
+    port: ${rabbitmq_port}
+    username: ${rabbitmq_username}
+    password: ${rabbitmq_password}
+    queue-listener: ${rabbitmq_queue_listener:user_registration_queue}
 
 eureka:
   client:
