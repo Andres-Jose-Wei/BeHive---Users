@@ -3,7 +3,6 @@ package com.anjowe.behive.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,27 +61,27 @@ public class UserController {
 		return userService.getUser(username);
 	}
 	
-	@PostMapping("user/{username}/position/{positionName}")
+	@PostMapping("/user/{username}/position/{positionName}")
 	public boolean userAddPosition(@PathVariable("positionName") String positionName, @PathVariable("username") String username) {
 		return positionService.userAddPosition(new Position(positionName), username);
 	}
 
-	@DeleteMapping("user/{username}/position/{positionName}")
+	@DeleteMapping("/user/{username}/position/{positionName}")
 	public boolean userDeletePosition(@PathVariable("positionName") String positionName, @PathVariable("username") String username) {
 		return positionService.userDeletePosition(new Position(positionName), username);
 	}
 	
-	@PostMapping("user/{username}/group/{groupName}")
+	@PostMapping("/user/{username}/group/{groupName}")
 	public boolean userAddGroup(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
 		return groupService.userAddOrUpdateGroup(new Group(groupName), username);
 	}
 
-	@DeleteMapping("user/{username}/group/{groupName}")
+	@DeleteMapping("/user/{username}/group/{groupName}")
 	public boolean userDeleteGroup(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
 		return groupService.userDeleteGroup(new Group(groupName), username);
 	}
 	
-	@PostMapping("user/{username}/skills")
+	@PostMapping("/user/{username}/skills")
 	public boolean userAddSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
 		for(String skillName: skills) {
 			skillsService.userAddSkill(new Skill(skillName), username);
@@ -90,7 +89,7 @@ public class UserController {
 		return true;
 	}
 
-	@DeleteMapping("user/{username}/skills")
+	@DeleteMapping("/user/{username}/skills")
 	public boolean userDeleteSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
 		for(String skillName: skills) {
 			skillsService.userDeleteSkill(new Skill(skillName), username);

@@ -3,11 +3,10 @@ package com.anjowe.behive.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Group;
@@ -29,13 +28,19 @@ public class GroupController {
 		return groupService.getAllGroups();
 	}
 	
-	@PostMapping("/group/{groupName}")
-	public boolean adminAddGroup(@PathVariable("groupName") String groupName) {
-		return groupService.addGroup(new Group(groupName));
+	@PostMapping("/group")
+	public boolean adminAddGroup(@RequestBody List<String> groups) {
+		for(String groupName: groups) {
+			groupService.addGroup(new Group(groupName));
+		}
+		return true;
 	}
 
-	@DeleteMapping("group/{groupName}")
-	public boolean adminDeletePosition(@PathVariable("groupName") String groupName) {
-		return groupService.deleteGroup(new Group(groupName));
+	@DeleteMapping("/group")
+	public boolean adminDeletePosition(@RequestBody List<String> groups) {
+		for(String groupName: groups) {
+			groupService.deleteGroup(new Group(groupName));
+		}
+		return true;
 	}
 }
