@@ -21,6 +21,7 @@ import com.anjowe.behive.service.SkillsService;
 import com.anjowe.behive.service.UserService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class UserController {
@@ -54,6 +55,11 @@ public class UserController {
 	@GetMapping("/user")
 	public Flux<User> getAllUsers(){
 		return userService.getAllUsers();
+	}
+	
+	@GetMapping("/user/{username}")
+	public Mono<User> getUser(@PathVariable("username") String username){
+		return userService.getUser(username);
 	}
 	
 	@PostMapping("user/{username}/position/{positionName}")
