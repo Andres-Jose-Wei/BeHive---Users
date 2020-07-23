@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: UserService
+
+  cloud:
+    config:
+      uri: ${config_uri:http://localhost:8888}
