@@ -26,6 +26,7 @@ spring:
       enabled: ${cloud_bus:true}
       refresh:
         enabled: ${cloud_bus_refresh:true}
+      id: ${spring.application.name}:${spring.profiles.active}:${random.uuid}
 
 eureka:
   client:
