@@ -24,15 +24,20 @@ spring:
     password: ${rabbitmq_password}
     queue-listener: ${rabbitmq_queue_listener}
 
+  cloud:
+    bus:
+      enabled: ${cloud_bus:true}
+      refresh:
+        enabled: ${cloud_bus_refresh:true}
 
 eureka:
   client:
-    registerWithEureka: true
-    fetchRegistry: true
+    registerWithEureka: ${registerWithEureka:true}
+    fetchRegistry: ${fetchRegistry:true}
     service-url:
       defaultZone:  ${eureka_url:http://localhost:8761/eureka/}
 
   instance:
     hostname: ${HOSTNAME:${spring.application.name}}
-    preferIpAddress: false
+    preferIpAddress: ${preferIpAddress:false}
     instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}:${server.port}

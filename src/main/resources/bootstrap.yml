@@ -1,7 +1,11 @@
 spring:
   application:
-    name: UserService
+    name: ${app_name:UserService}
+  profiles:
+    active: ${active_profile}
 
   cloud:
     config:
       uri: ${config_uri:http://localhost:8888}
+      username: ${spring_config_security_username}
+      password: ${spring_config_security_password}
