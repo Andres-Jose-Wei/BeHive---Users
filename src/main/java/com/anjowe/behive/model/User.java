@@ -20,13 +20,13 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Document(collection = "User")
 public class User {
-	
+
 	/**
 	 * A user’s id
 	 */
 	@Id
 	private String id;
-	
+
 	/**
 	 * A user’s username
 	 */
@@ -117,12 +117,13 @@ public class User {
 	 * Whether or not a user is already working on a project
 	 */
 	private boolean isAvailable;
-	
-	public User(){
+
+	public User() {
 		this.skillRatings = new HashMap<Skill, List<Double>>();
 		this.skillStats = new HashMap<Skill, Double>();
 		this.position = new Position();
 		this.reviews = new HashMap<String, List<Review>>();
+		this.group = new Group();
 	}
 
 }
