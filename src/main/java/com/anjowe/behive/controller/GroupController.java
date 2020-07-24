@@ -23,12 +23,12 @@ public class GroupController {
 		this.groupService = groupService;
 	}
 	
-	@GetMapping("/group")
+	@GetMapping("/groups")
 	public Mono<List<String>> getAllGroups(){
 		return groupService.getAllGroups();
 	}
 	
-	@PostMapping("/group")
+	@PostMapping("/admin/groups")
 	public boolean adminAddGroup(@RequestBody List<String> groups) {
 		for(String groupName: groups) {
 			groupService.addGroup(new Group(groupName));
@@ -36,7 +36,7 @@ public class GroupController {
 		return true;
 	}
 
-	@DeleteMapping("/group")
+	@DeleteMapping("/admin/groups")
 	public boolean adminDeletePosition(@RequestBody List<String> groups) {
 		for(String groupName: groups) {
 			groupService.deleteGroup(new Group(groupName));

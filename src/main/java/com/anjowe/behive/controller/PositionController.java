@@ -24,12 +24,12 @@ public class PositionController {
 		this.positionService = positionService;
 	}
 
-	@GetMapping("/position")
+	@GetMapping("/positions")
 	public Mono<List<String>> getAllPositions() {
 		return positionService.getAllPositions();
 	}
 
-	@PostMapping("/position")
+	@PostMapping("/admin/positions")
 	public boolean adminAddPosition(@RequestBody List<String> positions) {
 		for(String positionName: positions) {
 			positionService.addPosition(new Position(positionName));
@@ -37,7 +37,7 @@ public class PositionController {
 		return true;
 	}
 
-	@DeleteMapping("/position")
+	@DeleteMapping("/admin/positions")
 	public boolean adminDeletePosition(@RequestBody List<String> positions) {
 		for(String positionName: positions) {
 			positionService.deletePosition(new Position(positionName));

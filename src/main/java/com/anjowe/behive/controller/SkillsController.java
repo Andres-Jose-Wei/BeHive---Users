@@ -23,12 +23,12 @@ public class SkillsController {
 		this.skillsService = skillsService;
 	}
 	
-	@GetMapping("/skill")
+	@GetMapping("/skills")
 	public Mono<List<String>> getAllSkills(){
 		return skillsService.getAllSkills();
 	}
 	
-	@PostMapping("/skill")
+	@PostMapping("/admin/skills")
 	public boolean adminAddSkill(@RequestBody List<String> skills){
 		for(String skillName: skills) {
 			skillsService.addSkill(new Skill(skillName));
@@ -36,7 +36,7 @@ public class SkillsController {
 		return true;
 	}
 	
-	@DeleteMapping("/skill")
+	@DeleteMapping("/admin/skills")
 	public boolean adminDeleteSkill(@RequestBody List<String> skills){
 		for(String skillName: skills) {
 			skillsService.deleteSkill(new Skill(skillName));

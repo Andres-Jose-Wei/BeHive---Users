@@ -52,46 +52,51 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/user")
+	@GetMapping("/users")
 	public Flux<User> getAllUsers(){
 		return userService.getAllUsers();
 	}
 	
-	@GetMapping("/myuser")
+	@GetMapping("/user")
 	public Mono<User> getUser(@RequestHeader("USER_DETAILS") String username){
 		return userService.getUser(username);
 	}
 	
-	@PostMapping("/user/{username}/position/{positionName}")
-	public boolean userAddPosition(@PathVariable("positionName") String positionName, @PathVariable("username") String username) {
+	@PostMapping("/user")
+	public boolean updateUser(@RequestBody User user) {
+		return userService.updateUser(user);
+	}
+	
+	@PostMapping("/user/position/{positionName}")
+	public boolean userAddPosition(@PathVariable("positionName") String positionName, @RequestHeader("USER_DETAILS") String username) {
 		return positionService.userAddPosition(new Position(positionName), username);
 	}
 
-	@DeleteMapping("/user/{username}/position/{positionName}")
-	public boolean userDeletePosition(@PathVariable("positionName") String positionName, @PathVariable("username") String username) {
+	@DeleteMapping("/user/position/{positionName}")
+	public boolean userDeletePosition(@PathVariable("positionName") String positionName, @RequestHeader("USER_DETAILS") String username) {
 		return positionService.userDeletePosition(new Position(positionName), username);
 	}
 	
-	@PostMapping("/user/{username}/group/{groupName}")
-	public boolean userAddGroup(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
+	@PostMapping("/user/group/{groupName}")
+	public boolean userAddGroup(@PathVariable("groupName") String groupName, @RequestHeader("USER_DETAILS") String username) {
 		return groupService.userAddOrUpdateGroup(new Group(groupName), username);
 	}
 
-	@DeleteMapping("/user/{username}/group/{groupName}")
-	public boolean userDeleteGroup(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
+	@DeleteMapping("/user/group/{groupName}")
+	public boolean userDeleteGroup(@PathVariable("groupName") String groupName, @RequestHeader("USER_DETAILS") String username) {
 		return groupService.userDeleteGroup(new Group(groupName), username);
 	}
 	
-	@PostMapping("/user/{username}/skills")
-	public boolean userAddSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
+	@PostMapping("/user/skills")
+	public boolean userAddSkill(@RequestBody List<String> skills, @RequestHeader("USER_DETAILS") String username) {
 		for(String skillName: skills) {
 			skillsService.userAddSkill(new Skill(skillName), username);
 		}
 		return true;
 	}
 
-	@DeleteMapping("/user/{username}/skills")
-	public boolean userDeleteSkill(@RequestBody List<String> skills, @PathVariable("username") String username) {
+	@DeleteMapping("/user/skills")
+	public boolean userDeleteSkill(@RequestBody List<String> skills, @RequestHeader("USER_DETAILS") String username) {
 		for(String skillName: skills) {
 			skillsService.userDeleteSkill(new Skill(skillName), username);
 		}
