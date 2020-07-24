@@ -57,7 +57,7 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
-	@GetMapping("/user")
+	@GetMapping("/myuser")
 	public Mono<User> getUser(@RequestHeader("USER_DETAILS") String username){
 		return userService.getUser(username);
 	}
