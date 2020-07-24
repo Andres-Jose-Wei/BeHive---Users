@@ -1,7 +1,5 @@
 package com.anjowe.behive.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Group;
 import com.anjowe.behive.model.Position;
-import com.anjowe.behive.model.Skill;
 import com.anjowe.behive.model.User;
 import com.anjowe.behive.service.GroupService;
 import com.anjowe.behive.service.PositionService;
@@ -93,15 +90,13 @@ public class UserController {
 	@PostMapping("/user/skills/{skill}")
 	public Mono<Boolean> userAddSkill(@PathVariable(name = "skill") String skill,
 			@RequestHeader("USER_DETAILS") String username) {
-		return skillsService.userAddSkill(new Skill(skill), username);
+		return skillsService.userAddSkill(skill, username);
 	}
 
-	@DeleteMapping("/user/skills")
-	public boolean userDeleteSkill(@RequestBody List<String> skills, @RequestHeader("USER_DETAILS") String username) {
-		for (String skillName : skills) {
-			skillsService.userDeleteSkill(new Skill(skillName), username);
-		}
-		return true;
+	@DeleteMapping("/user/skills/{skill}")
+	public Mono<Boolean> userDeleteSkill(@PathVariable(name = "skill") String skill,
+			@RequestHeader("USER_DETAILS") String username) {
+		return skillsService.userDeleteSkill(skill, username);
 	}
 
 }

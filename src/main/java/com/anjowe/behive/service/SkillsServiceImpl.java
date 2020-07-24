@@ -48,10 +48,10 @@ public class SkillsServiceImpl implements SkillsService {
 	}
 
 	@Override
-	public Mono<Boolean> userAddSkill(Skill skill, String username) {
+	public Mono<Boolean> userAddSkill(String skill, String username) {
 		return this.userService.getUser(username).map(user -> {
-			Map<Skill, List<Double>> tempSkillRatings = user.getSkillRatings();
-			Map<Skill, Double> tempSkillStats = user.getSkillStats();
+			Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			Map<String, Double> tempSkillStats = user.getSkillStats();
 			tempSkillRatings.put(skill, new ArrayList<Double>());
 			tempSkillStats.put(skill, 0.0d);
 			user.setSkillRatings(tempSkillRatings);
@@ -64,18 +64,17 @@ public class SkillsServiceImpl implements SkillsService {
 	}
 
 	@Override
-	public boolean userDeleteSkill(Skill skill, String username) {
-		this.userService.getUser(username).map(user -> {
-			Map<Skill, List<Double>> tempSkillRatings = user.getSkillRatings();
-			Map<Skill, Double> tempSkillStats = user.getSkillStats();
+	public Mono<Boolean> userDeleteSkill(String skill, String username) {
+		return this.userService.getUser(username).map(user -> {
+			Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			Map<String, Double> tempSkillStats = user.getSkillStats();
 			tempSkillRatings.remove(skill);
 			tempSkillStats.remove(skill);
 			this.userService.updateUser(user);
 			System.out.println("Skill (" + skill.toString() + "): deleted from User (" + username + ")");
 			System.out.println("User (" + username + "): updated");
 			return true;
-		}).subscribe();
-		return true;
+		});
 	}
 
 }

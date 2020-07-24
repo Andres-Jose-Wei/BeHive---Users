@@ -13,7 +13,7 @@ public interface SkillsService {
 
 	public boolean deleteSkill(Skill skill);
 
-	public Mono<Boolean> userAddSkill(Skill skill, String username);
+	public Mono<Boolean> userAddSkill(String skill, String username);
 
-	public boolean userDeleteSkill(Skill skill, String username);
+	public Mono<Boolean> userDeleteSkill(String skill, String username);
 }

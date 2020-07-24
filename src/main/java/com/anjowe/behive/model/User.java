@@ -50,12 +50,12 @@ public class User {
 	/**
 	 * A user’s skills and the ratings for each skill
 	 */
-	private Map<Skill, List<Double>> skillRatings;
+	private Map<String, List<Double>> skillRatings;
 
 	/**
 	 * A user’s skills and their average rating for each skill
 	 */
-	private Map<Skill, Double> skillStats;
+	private Map<String, Double> skillStats;
 
 	/**
 	 * A user’s rating within the position
@@ -119,8 +119,8 @@ public class User {
 	private boolean isAvailable;
 
 	public User() {
-		this.skillRatings = new HashMap<Skill, List<Double>>();
-		this.skillStats = new HashMap<Skill, Double>();
+		this.skillRatings = new HashMap<String, List<Double>>();
+		this.skillStats = new HashMap<String, Double>();
 		this.position = new Position();
 		this.reviews = new HashMap<String, List<Review>>();
 		this.group = new Group();
