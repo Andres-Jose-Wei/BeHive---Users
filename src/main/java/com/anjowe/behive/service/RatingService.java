@@ -2,10 +2,12 @@ package com.anjowe.behive.service;
 
 import java.util.Map;
 
+import reactor.core.publisher.Mono;
+
 public interface RatingService {
-	public boolean rateUserSkills(String username, Map<String, Double> skillRating);
+	public Mono<Boolean> rateUserSkills(String username, Map<String, Double> skillRating);
 
-	public boolean ratePersonalSkills(String username, double punctuality);
+	public Mono<Boolean> ratePersonalSkills(String username, double punctuality);
 
-	public boolean calculateOverallAverage(String username);
+	public Mono<Boolean> calculateOverallAverage(String username);
 }

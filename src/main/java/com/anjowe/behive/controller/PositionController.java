@@ -30,7 +30,7 @@ public class PositionController {
 	}
 
 	@PostMapping("/admin/positions")
-	public boolean adminAddPosition(@RequestBody List<String> positions) {
+	public boolean adminAddPositions(@RequestBody List<String> positions) {
 		for(String positionName: positions) {
 			positionService.addPosition(new Position(positionName));
 		}
@@ -38,7 +38,7 @@ public class PositionController {
 	}
 
 	@DeleteMapping("/admin/positions")
-	public boolean adminDeletePosition(@RequestBody List<String> positions) {
+	public boolean adminDeletePositions(@RequestBody List<String> positions) {
 		for(String positionName: positions) {
 			positionService.deletePosition(new Position(positionName));
 		}

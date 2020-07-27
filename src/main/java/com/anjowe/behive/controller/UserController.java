@@ -64,25 +64,25 @@ public class UserController {
 	}
 
 	@PostMapping("/user/position/{positionName}")
-	public boolean userAddPosition(@PathVariable("positionName") String positionName,
+	public Mono<Boolean> userAddPosition(@PathVariable("positionName") String positionName,
 			@RequestHeader("USER_DETAILS") String username) {
 		return positionService.userAddPosition(new Position(positionName), username);
 	}
 
 	@DeleteMapping("/user/position/{positionName}")
-	public boolean userDeletePosition(@PathVariable("positionName") String positionName,
+	public Mono<Boolean> userDeletePosition(@PathVariable("positionName") String positionName,
 			@RequestHeader("USER_DETAILS") String username) {
 		return positionService.userDeletePosition(new Position(positionName), username);
 	}
 
 	@PostMapping("/user/group/{groupName}")
-	public boolean userAddGroup(@PathVariable("groupName") String groupName,
+	public Mono<Boolean> userAddGroup(@PathVariable("groupName") String groupName,
 			@RequestHeader("USER_DETAILS") String username) {
 		return groupService.userAddOrUpdateGroup(new Group(groupName), username);
 	}
 
 	@DeleteMapping("/user/group/{groupName}")
-	public boolean userDeleteGroup(@PathVariable("groupName") String groupName,
+	public Mono<Boolean> userDeleteGroup(@PathVariable("groupName") String groupName,
 			@RequestHeader("USER_DETAILS") String username) {
 		return groupService.userDeleteGroup(new Group(groupName), username);
 	}

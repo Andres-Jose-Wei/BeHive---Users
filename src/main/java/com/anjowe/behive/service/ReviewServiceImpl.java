@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Review;
 
+import reactor.core.publisher.Mono;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
 	
@@ -21,8 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 	
 	@Override
-	public boolean addReview(String usernameReviewee, String usernameReviewer, Review review) {
-		this.userService.getUser(usernameReviewee).map(user -> {
+	public Mono<Boolean> addReview(String usernameReviewee, String usernameReviewer, Review review) {
+		return this.userService.getUser(usernameReviewee).map(user -> {
 			if(user.getReviews()==null) {
 				Map<String, List<Review>> reviews = new HashMap<String, List<Review>>();
 				reviews.put(usernameReviewer, Arrays.asList(new Review[] {review}));
@@ -38,13 +40,12 @@ public class ReviewServiceImpl implements ReviewService {
 				this.userService.updateUser(user);
 				return true;
 			}
-		}).subscribe();
-		return true;
+		});
 	}
 	
 	@Override
-	public boolean countReviews(String username) {
-		this.userService.getUser(username).map(user -> {
+	public Mono<Boolean> countReviews(String username) {
+		return this.userService.getUser(username).map(user -> {
 			if(user.getReviews()==null) {
 				user.setReviews(new HashMap<String, List<Review>>());
 			}
@@ -53,21 +54,19 @@ public class ReviewServiceImpl implements ReviewService {
 			}
 			this.userService.updateUser(user);
 			return true;
-		}).subscribe();
-		return true;
+		});
 	}
 
 	@Override
-	public boolean countUniqueReviewers(String username) {
-		this.userService.getUser(username).map(user ->{
+	public Mono<Boolean> countUniqueReviewers(String username) {
+		return this.userService.getUser(username).map(user ->{
 		if(user.getReviews()==null) {
 			user.setReviews(new HashMap<String, List<Review>>());
 		}
 		user.setUniqueReviewersCount(user.getReviews().keySet().size());
 		this.userService.updateUser(user);
 		return true;
-		}).subscribe();
-		return true;
+		});
 	}
 
 }

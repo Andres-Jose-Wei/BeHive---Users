@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.model.Skill;
@@ -17,15 +16,11 @@ import reactor.core.publisher.Mono;
 public class SkillsServiceImpl implements SkillsService {
 	private SkillsRepo skillsRepo;
 	private UserService userService;
-
-	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	@Autowired
-	public void setSkillsRepo(SkillsRepo skillsRepo) {
+	
+	public SkillsServiceImpl(SkillsRepo skillsRepo, UserService userService) {
+		super();
 		this.skillsRepo = skillsRepo;
+		this.userService = userService;
 	}
 
 	@Override

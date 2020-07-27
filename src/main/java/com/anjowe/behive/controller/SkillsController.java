@@ -29,7 +29,7 @@ public class SkillsController {
 	}
 	
 	@PostMapping("/admin/skills")
-	public boolean adminAddSkill(@RequestBody List<String> skills){
+	public boolean adminAddSkills(@RequestBody List<String> skills){
 		for(String skillName: skills) {
 			skillsService.addSkill(new Skill(skillName));
 		}
@@ -37,7 +37,7 @@ public class SkillsController {
 	}
 	
 	@DeleteMapping("/admin/skills")
-	public boolean adminDeleteSkill(@RequestBody List<String> skills){
+	public boolean adminDeleteSkills(@RequestBody List<String> skills){
 		for(String skillName: skills) {
 			skillsService.deleteSkill(new Skill(skillName));
 		}

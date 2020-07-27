@@ -117,6 +117,11 @@ public class User {
 	 * Whether or not a user is already working on a project
 	 */
 	private boolean isAvailable;
+	
+	/**
+	 * Whether or not a user is the Admin of the application
+	 */
+	private boolean isAdmin;
 
 	public User() {
 		this.skillRatings = new HashMap<String, List<Double>>();

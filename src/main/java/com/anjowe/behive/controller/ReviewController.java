@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anjowe.behive.model.Review;
 import com.anjowe.behive.service.ReviewService;
 
+import reactor.core.publisher.Mono;
+
 @RestController
 public class ReviewController {
 	private ReviewService reviewService;
@@ -19,7 +21,7 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/review/{reviewerUsername}/add/{revieweeUsername}")
-	public boolean addReview(@RequestBody Review review, @PathVariable("reviewerUsername") String reviewerUsername, @PathVariable("revieweeUsername") String revieweeUsername ) {
+	public Mono<Boolean> addReview(@RequestBody Review review, @PathVariable("reviewerUsername") String reviewerUsername, @PathVariable("revieweeUsername") String revieweeUsername ) {
 		return this.reviewService.addReview(revieweeUsername, reviewerUsername, review);
 	}
 }

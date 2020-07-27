@@ -13,7 +13,7 @@ public interface GroupService {
 	
 	public boolean deleteGroup(Group group);
 	
-	public boolean userAddOrUpdateGroup(Group group, String username);
+	public Mono<Boolean> userAddOrUpdateGroup(Group group, String username);
 	
-	public boolean userDeleteGroup(Group group, String username);
+	public Mono<Boolean> userDeleteGroup(Group group, String username);
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.anjowe.behive.repo.UserRepo;
 
+import reactor.core.publisher.Mono;
+
 @Service
 public class RatingServiceImpl implements RatingService {
 
@@ -42,8 +44,8 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public boolean rateUserSkills(String username, Map<String, Double> skillRating) {
-		this.userService.getUser(username).map(user -> {
+	public Mono<Boolean> rateUserSkills(String username, Map<String, Double> skillRating) {
+		return this.userService.getUser(username).map(user -> {
 			if (user.getSkillRatings() == null) {
 				user.setSkillRatings(new HashMap<String, List<Double>>());
 			}
@@ -64,27 +66,25 @@ public class RatingServiceImpl implements RatingService {
 					/ (user.getSkillStats().size() + 1));
 			this.userService.updateUser(user);
 			return true;
-		}).subscribe();
-		return true;
+		});
 	}
-
-	public boolean ratePersonalSkills(String username, double punctuality) {
-		this.userService.getUser(username).map(user -> {
+	
+	@Override
+	public Mono<Boolean> ratePersonalSkills(String username, double punctuality) {
+		return this.userService.getUser(username).map(user -> {
 			user.setPersonalSkillAvg((user.getUniqueReviewersCount() / maxUniqueReviewersCount) * 100 + punctuality
 					+ (user.getMvpCount() / maxMvpCount) * 100);
 			userService.updateUser(user);
 			return true;
-		}).subscribe();
-
-		return true;
+		});
 	}
-
-	public boolean calculateOverallAverage(String username) {
-		this.userService.getUser(username).map(user -> {
+	
+	@Override
+	public Mono<Boolean> calculateOverallAverage(String username) {
+		return this.userService.getUser(username).map(user -> {
 			user.setOverallRating((user.getTechnicalSkillAvg() + user.getPersonalSkillAvg()) / 2);
 			return true;
-		}).subscribe();
-		return true;
+		});
 	}
 
 }

@@ -29,7 +29,7 @@ public class GroupController {
 	}
 	
 	@PostMapping("/admin/groups")
-	public boolean adminAddGroup(@RequestBody List<String> groups) {
+	public boolean adminAddGroups(@RequestBody List<String> groups) {
 		for(String groupName: groups) {
 			groupService.addGroup(new Group(groupName));
 		}
@@ -37,7 +37,7 @@ public class GroupController {
 	}
 
 	@DeleteMapping("/admin/groups")
-	public boolean adminDeletePosition(@RequestBody List<String> groups) {
+	public boolean adminDeleteGroups(@RequestBody List<String> groups) {
 		for(String groupName: groups) {
 			groupService.deleteGroup(new Group(groupName));
 		}
