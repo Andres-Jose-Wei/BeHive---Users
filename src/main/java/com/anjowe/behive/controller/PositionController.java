@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,11 @@ public class PositionController {
 	@GetMapping("/positions")
 	public Mono<List<String>> getAllPositions() {
 		return positionService.getAllPositions();
+	}
+	
+	@PostMapping("/admin/positions/{positionName}")
+	public boolean adminAddPosition(@PathVariable("positionName") String positionName) {
+			return positionService.addPosition(new Position(positionName));
 	}
 
 	@PostMapping("/admin/positions")

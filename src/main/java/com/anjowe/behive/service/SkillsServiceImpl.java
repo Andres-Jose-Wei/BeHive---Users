@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.anjowe.behive.logger.AppLogger;
 import com.anjowe.behive.model.Skill;
 import com.anjowe.behive.repo.SkillsRepo;
 
@@ -32,6 +33,7 @@ public class SkillsServiceImpl implements SkillsService {
 	public boolean addSkill(Skill skill) {
 		this.skillsRepo.save(skill).subscribe();
 		System.out.println("Skill (" + skill.toString() + "): saved");
+		AppLogger.log.info("Skill (" + skill.toString() + "): saved");
 		return true;
 	}
 
@@ -39,6 +41,7 @@ public class SkillsServiceImpl implements SkillsService {
 	public boolean deleteSkill(Skill skill) {
 		this.skillsRepo.delete(skill).subscribe();
 		System.out.println("Skill (" + skill.toString() + "): deleted");
+		AppLogger.log.info("Skill (" + skill.toString() + "): deleted");
 		return true;
 	}
 
@@ -52,8 +55,8 @@ public class SkillsServiceImpl implements SkillsService {
 			user.setSkillRatings(tempSkillRatings);
 			user.setSkillStats(tempSkillStats);
 			System.out.println("Skill (" + skill.toString() + "): added to User (" + username + ")");
+			AppLogger.log.info("Skill (" + skill.toString() + "): added to User (" + username + ")");
 			this.userService.updateUser(user);
-			System.out.println("User (" + username + "): updated");
 			return true;
 		});
 	}
@@ -65,9 +68,11 @@ public class SkillsServiceImpl implements SkillsService {
 			Map<String, Double> tempSkillStats = user.getSkillStats();
 			tempSkillRatings.remove(skill);
 			tempSkillStats.remove(skill);
-			this.userService.updateUser(user);
+			user.setSkillRatings(tempSkillRatings);
+			user.setSkillStats(tempSkillStats);
 			System.out.println("Skill (" + skill.toString() + "): deleted from User (" + username + ")");
-			System.out.println("User (" + username + "): updated");
+			AppLogger.log.info("Skill (" + skill.toString() + "): deleted from User (" + username + ")");
+			this.userService.updateUser(user);
 			return true;
 		});
 	}

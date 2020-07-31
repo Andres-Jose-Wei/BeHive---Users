@@ -35,6 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
 				tempReviewList.add(review);
 				Map <String, List<Review>> tempReviewsMap = user.getReviews();
 				tempReviewsMap.put(usernameReviewer, tempReviewList);
+				user.setReviews(tempReviewsMap);
 				this.userService.updateUser(user);
 				countUniqueReviewers(usernameReviewee);
 				this.userService.updateUser(user);
@@ -66,6 +67,13 @@ public class ReviewServiceImpl implements ReviewService {
 		user.setUniqueReviewersCount(user.getReviews().keySet().size());
 		this.userService.updateUser(user);
 		return true;
+		});
+	}
+
+	@Override
+	public Mono<Map<String, List<Review>>> getUserReviews(String username) {
+		return this.userService.getUser(username).map(user -> {
+			return user.getReviews();
 		});
 	}
 

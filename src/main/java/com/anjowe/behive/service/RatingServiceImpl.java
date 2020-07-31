@@ -74,7 +74,7 @@ public class RatingServiceImpl implements RatingService {
 		return this.userService.getUser(username).map(user -> {
 			user.setPersonalSkillAvg((user.getUniqueReviewersCount() / maxUniqueReviewersCount) * 100 + punctuality
 					+ (user.getMvpCount() / maxMvpCount) * 100);
-			userService.updateUser(user);
+			this.userService.updateUser(user);
 			return true;
 		});
 	}

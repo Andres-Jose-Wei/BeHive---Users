@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.anjowe.behive.logger.AppLogger;
 import com.anjowe.behive.model.Group;
 import com.anjowe.behive.repo.GroupRepo;
 
@@ -30,6 +31,7 @@ public class GroupServiceImpl implements GroupService {
 	public boolean addGroup(Group group) {
 		this.groupRepo.save(group).subscribe();
 		System.out.println("Group ("+group.toString()+"): saved");
+		AppLogger.log.info("Group ("+group.toString()+"): saved");
 		return true;
 	}
 
@@ -37,6 +39,7 @@ public class GroupServiceImpl implements GroupService {
 	public boolean deleteGroup(Group group) {
 		this.groupRepo.delete(group).subscribe();
 		System.out.println("Group ("+group.toString()+"): deleted");
+		AppLogger.log.info("Group ("+group.toString()+"): deleted");
 		return true;
 	}
 
@@ -45,8 +48,8 @@ public class GroupServiceImpl implements GroupService {
 		return this.userService.getUser(username).map(user ->{
 			user.setGroup(group);
 			System.out.println("Group ("+group.toString()+"): updated/added to User ("+username+")");
+			AppLogger.log.info("Group ("+group.toString()+"): updated/added to User ("+username+")");
 			this.userService.updateUser(user);
-			System.out.println("User ("+username+"): updated");
 			return true;
 		});
 	}
@@ -56,8 +59,8 @@ public class GroupServiceImpl implements GroupService {
 		return this.userService.getUser(username).map(user ->{
 			user.setGroup(null);
 			System.out.println("Group ("+group.toString()+"): deleted from User ("+username+")");
+			AppLogger.log.info("Group ("+group.toString()+"): deleted from User ("+username+")");
 			this.userService.updateUser(user);
-			System.out.println("User ("+username+"): updated");
 			return true;
 		});
 	}

@@ -9,6 +9,8 @@ public interface UserService {
 	
 	Flux<User> getAllUsers();
 	
+	Flux<User> getAllAvailableUsers();
+	
 	public Mono<User> getUser(String username);
 
 	public boolean createOrSaveUser(User user);
@@ -16,6 +18,8 @@ public interface UserService {
 	public boolean deleteUser(User user);
 
 	public boolean updateUser(User user);
+	
+	public Mono<Boolean> setUserAvailability(String username, boolean availability);
 	
 	
 	

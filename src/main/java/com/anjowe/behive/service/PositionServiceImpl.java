@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.anjowe.behive.logger.AppLogger;
 import com.anjowe.behive.model.Position;
 import com.anjowe.behive.repo.PositionRepo;
 
@@ -32,6 +33,7 @@ public class PositionServiceImpl implements PositionService {
 		
 		this.positionRepo.save(position).subscribe();
 		System.out.println("Position ("+position.toString()+"): saved");
+		AppLogger.log.info("Position ("+position.toString()+"): saved");
 		return true;
 	}
 
@@ -39,6 +41,7 @@ public class PositionServiceImpl implements PositionService {
 	public boolean deletePosition(Position position) {
 		this.positionRepo.delete(position).subscribe();
 		System.out.println("Position ("+position.toString()+"): deleted");
+		AppLogger.log.info("Position ("+position.toString()+"): deleted");
 		return true;
 	}
 	
@@ -47,8 +50,8 @@ public class PositionServiceImpl implements PositionService {
 		return this.userService.getUser(username).map(user ->{
 			user.setPosition(position);
 			System.out.println("Position ("+position.toString()+"): added to User ("+username+")");
+			AppLogger.log.info("Position ("+position.toString()+"): added to User ("+username+")");
 			this.userService.updateUser(user);
-			System.out.println("User ("+username+"): updated");
 			return true;
 		});
 	}
@@ -58,8 +61,8 @@ public class PositionServiceImpl implements PositionService {
 		return this.userService.getUser(username).map(user ->{
 			user.setPosition(null);
 			System.out.println("Position ("+position.toString()+"): deleted from User ("+username+")");
+			AppLogger.log.info("Position ("+position.toString()+"): deleted from User ("+username+")");
 			this.userService.updateUser(user);
-			System.out.println("User ("+username+"): updated");
 			return true;
 		});
 	}
