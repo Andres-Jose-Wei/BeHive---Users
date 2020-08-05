@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
 	public boolean createOrSaveUser(User user) {
 		user.setAvailable(true);
 		this.userRepo.save(user).subscribe();
+		
 		System.out.println("User (" + user.getUsername() + "): registered and saved into database");
 		AppLogger.log.info("User (" + user.getUsername() + "): registered and saved into database");
 		return true;
@@ -48,6 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteUser(User user) {
 		this.userRepo.delete(user).subscribe();
+		
 		System.out.println("User (" + user.getUsername() + "): deleted");
 		AppLogger.log.info("User (" + user.getUsername() + "): deleted");
 		return true;
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean updateUser(User user) {
 		this.userRepo.save(user).subscribe();
+		
 		System.out.println("User (" + user.getUsername() + "): updated");
 		AppLogger.log.info("User (" + user.getUsername() + "): updated");
 		return true;
@@ -66,12 +69,9 @@ public class UserServiceImpl implements UserService {
 		return getUser(username).map(user ->{
 			user.setAvailable(availability);
 			this.userRepo.save(user).subscribe();
-			if(availability == false) {
-				System.out.println("User (" + user.getUsername() + "): availibity set to false");
-				AppLogger.log.info("User (" + user.getUsername() + "): availibity set to false");
-			}
-			System.out.println("User (" + user.getUsername() + "): availibity set to true");
-			AppLogger.log.info("User (" + user.getUsername() + "): availibity set to true");
+			
+			System.out.println("User (" + user.getUsername() + "): availibity set to " + String.valueOf(availability));
+			AppLogger.log.info("User (" + user.getUsername() + "): availibity set to " + String.valueOf(availability));
 			return true;
 		});
 	}

@@ -11,10 +11,6 @@ public interface ReviewService {
 
 	public Mono<Boolean> addReview(String usernameReviewee, String usernameReviewer, Review review);
 	
-	public Mono<Boolean> countReviews(String username);
-	
-	public Mono<Boolean> countUniqueReviewers(String username);
-	
 	public Mono<Map<String,List<Review>>> getUserReviews(String username);
 
 }

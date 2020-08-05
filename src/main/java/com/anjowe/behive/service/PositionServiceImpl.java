@@ -32,6 +32,7 @@ public class PositionServiceImpl implements PositionService {
 	public boolean addPosition(Position position) {
 		
 		this.positionRepo.save(position).subscribe();
+		
 		System.out.println("Position ("+position.toString()+"): saved");
 		AppLogger.log.info("Position ("+position.toString()+"): saved");
 		return true;
@@ -40,6 +41,7 @@ public class PositionServiceImpl implements PositionService {
 	@Override
 	public boolean deletePosition(Position position) {
 		this.positionRepo.delete(position).subscribe();
+		
 		System.out.println("Position ("+position.toString()+"): deleted");
 		AppLogger.log.info("Position ("+position.toString()+"): deleted");
 		return true;
@@ -49,9 +51,10 @@ public class PositionServiceImpl implements PositionService {
 	public Mono<Boolean> userAddPosition(Position position, String username) {
 		return this.userService.getUser(username).map(user ->{
 			user.setPosition(position);
+			this.userService.updateUser(user);
+			
 			System.out.println("Position ("+position.toString()+"): added to User ("+username+")");
 			AppLogger.log.info("Position ("+position.toString()+"): added to User ("+username+")");
-			this.userService.updateUser(user);
 			return true;
 		});
 	}
@@ -60,9 +63,10 @@ public class PositionServiceImpl implements PositionService {
 	public Mono<Boolean> userDeletePosition(Position position, String username) {
 		return this.userService.getUser(username).map(user ->{
 			user.setPosition(null);
+			this.userService.updateUser(user);
+			
 			System.out.println("Position ("+position.toString()+"): deleted from User ("+username+")");
 			AppLogger.log.info("Position ("+position.toString()+"): deleted from User ("+username+")");
-			this.userService.updateUser(user);
 			return true;
 		});
 	}

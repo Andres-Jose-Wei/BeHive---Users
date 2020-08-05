@@ -50,7 +50,14 @@ public class User {
 	/**
 	 * A user’s skills and the ratings for each skill
 	 */
-	private Map<String, List<Double>> skillRatings;
+	// private Map<String, List<Double>> skillRatings;
+	
+	
+	
+	/**
+	 * Number of ratings per skill
+	 */
+	private Map<String, Integer> numSkillRatings;
 
 	/**
 	 * A user’s skills and their average rating for each skill
@@ -91,11 +98,11 @@ public class User {
 	 * The percentage of how many times a user completed all their tasks on time
 	 */
 	private double punctuality;
-
+	
 	/**
-	 * The number of reviews for a user
+	 * The number of times a user had their punctuality rated by another user.
 	 */
-	private int reviewsCount;
+	private int punctualityCount;
 
 	/**
 	 * The number of unique reviewers for a user
@@ -124,7 +131,8 @@ public class User {
 	private boolean isAdmin;
 
 	public User() {
-		this.skillRatings = new HashMap<String, List<Double>>();
+		//this.skillRatings = new HashMap<String, List<Double>>();
+		this.numSkillRatings = new HashMap<String, Integer>();
 		this.skillStats = new HashMap<String, Double>();
 		this.position = new Position();
 		this.reviews = new HashMap<String, List<Review>>();

@@ -1,6 +1,5 @@
 package com.anjowe.behive.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,6 +31,7 @@ public class SkillsServiceImpl implements SkillsService {
 	@Override
 	public boolean addSkill(Skill skill) {
 		this.skillsRepo.save(skill).subscribe();
+		
 		System.out.println("Skill (" + skill.toString() + "): saved");
 		AppLogger.log.info("Skill (" + skill.toString() + "): saved");
 		return true;
@@ -40,6 +40,7 @@ public class SkillsServiceImpl implements SkillsService {
 	@Override
 	public boolean deleteSkill(Skill skill) {
 		this.skillsRepo.delete(skill).subscribe();
+		
 		System.out.println("Skill (" + skill.toString() + "): deleted");
 		AppLogger.log.info("Skill (" + skill.toString() + "): deleted");
 		return true;
@@ -48,15 +49,19 @@ public class SkillsServiceImpl implements SkillsService {
 	@Override
 	public Mono<Boolean> userAddSkill(String skill, String username) {
 		return this.userService.getUser(username).map(user -> {
-			Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			//Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			Map<String, Integer> tempNumSkillRatings = user.getNumSkillRatings();
 			Map<String, Double> tempSkillStats = user.getSkillStats();
-			tempSkillRatings.put(skill, new ArrayList<Double>());
+			//tempSkillRatings.put(skill, new ArrayList<Double>());
+			tempNumSkillRatings.put(skill, 0);
 			tempSkillStats.put(skill, 0.0d);
-			user.setSkillRatings(tempSkillRatings);
+			//user.setSkillRatings(tempSkillRatings);
+			user.setNumSkillRatings(tempNumSkillRatings);
 			user.setSkillStats(tempSkillStats);
-			System.out.println("Skill (" + skill.toString() + "): added to User (" + username + ")");
-			AppLogger.log.info("Skill (" + skill.toString() + "): added to User (" + username + ")");
 			this.userService.updateUser(user);
+			
+			System.out.println("Skill (" + skill + "): added to User (" + username + ")");
+			AppLogger.log.info("Skill (" + skill + "): added to User (" + username + ")");
 			return true;
 		});
 	}
@@ -64,15 +69,19 @@ public class SkillsServiceImpl implements SkillsService {
 	@Override
 	public Mono<Boolean> userDeleteSkill(String skill, String username) {
 		return this.userService.getUser(username).map(user -> {
-			Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			//Map<String, List<Double>> tempSkillRatings = user.getSkillRatings();
+			Map<String, Integer> tempNumSkillRatings = user.getNumSkillRatings();
 			Map<String, Double> tempSkillStats = user.getSkillStats();
-			tempSkillRatings.remove(skill);
+			//tempSkillRatings.remove(skill);
+			tempNumSkillRatings.remove(skill);
 			tempSkillStats.remove(skill);
-			user.setSkillRatings(tempSkillRatings);
+			//user.setSkillRatings(tempSkillRatings);
+			user.setNumSkillRatings(tempNumSkillRatings);
 			user.setSkillStats(tempSkillStats);
-			System.out.println("Skill (" + skill.toString() + "): deleted from User (" + username + ")");
-			AppLogger.log.info("Skill (" + skill.toString() + "): deleted from User (" + username + ")");
 			this.userService.updateUser(user);
+			
+			System.out.println("Skill (" + skill + "): deleted from User (" + username + ")");
+			AppLogger.log.info("Skill (" + skill + "): deleted from User (" + username + ")");
 			return true;
 		});
 	}
