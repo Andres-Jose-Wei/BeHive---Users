@@ -28,13 +28,14 @@ public class ReviewServiceImpl implements ReviewService {
 				Map <String, List<Review>> tempReviewsMap = user.getReviews();
 				tempReviewsMap.put(usernameReviewer, tempReviewList);
 				user.setReviews(tempReviewsMap);
+				user.setUniqueReviewersCount(user.getReviews().keySet().size());
 				this.userService.updateUser(user);
-				countUniqueReviewers(usernameReviewee);
-				this.userService.updateUser(user);
+				//countUniqueReviewers(usernameReviewee);
 				return true;
 		});
 	}
-
+	
+	/*
 	private Mono<Boolean> countUniqueReviewers(String username) {
 		return this.userService.getUser(username).map(user ->{
 		user.setUniqueReviewersCount(user.getReviews().keySet().size());
@@ -42,7 +43,8 @@ public class ReviewServiceImpl implements ReviewService {
 		return true;
 		});
 	}
-
+	*/
+	
 	@Override
 	public Mono<Map<String, List<Review>>> getUserReviews(String username) {
 		return this.userService.getUser(username).map(user -> {

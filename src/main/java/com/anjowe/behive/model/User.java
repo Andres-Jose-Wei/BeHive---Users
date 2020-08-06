@@ -90,7 +90,7 @@ public class User {
 	private Group group; // a user’s company or department
 
 	/**
-	 * A user’s reviews from their superiors
+	 * A user’s reviews from their project team members
 	 */
 	private Map<String, List<Review>> reviews;
 

@@ -6,9 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anjowe.behive.model.Review;
@@ -23,11 +20,6 @@ public class ReviewController {
 	@Autowired
 	public void setReviewService(ReviewService reviewService) {
 		this.reviewService = reviewService;
-	}
-	
-	@PostMapping("/user/review/{revieweeUsername}")
-	public Mono<Boolean> addReview(@RequestBody Review review, @RequestHeader("USER_NAME") String reviewerUsername, @PathVariable("revieweeUsername") String revieweeUsername ) {
-		return this.reviewService.addReview(revieweeUsername, reviewerUsername, review);
 	}
 	
 	@GetMapping("/reviews/{revieweeUsername}")

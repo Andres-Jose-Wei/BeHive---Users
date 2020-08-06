@@ -5,139 +5,127 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.anjowe.behive.model.Review;
 import com.anjowe.behive.repo.UserRepo;
 
 import reactor.core.publisher.Mono;
 
 @Service
 public class RatingServiceImpl implements RatingService {
-
-	private int maxProjectCount;
-
-	private int maxUniqueReviewersCount;
-
-	private int maxMvpCount;
-
+	//private int maxMvpCount;
+	
 	private UserService userService;
 
 	private UserRepo userRepo;
+	
+	private ReviewService reviewService;
 
-	public RatingServiceImpl(UserService userService, UserRepo userRepo) {
+	public RatingServiceImpl(UserService userService, UserRepo userRepo, ReviewService reviewService) {
 		this.userRepo = userRepo;
 		this.userService = userService;
-		/*
-		this.userRepo.findFirstByOrderByProjectCountDesc().map(user -> {
-			maxProjectCount = user.getProjectCount();
-			return null;
-		}).subscribe();
-
-		this.userRepo.findFirstByOrderByUniqueReviewersCountDesc().map(user -> {
-			maxUniqueReviewersCount = user.getUniqueReviewersCount();
-			return null;
-		}).subscribe();
-
-		this.userRepo.findFirstByOrderByMvpCountDesc().map(user -> {
-			maxMvpCount = user.getMvpCount();
-			return null;
-		}).subscribe();
-		*/
+		this.reviewService = reviewService;
 	}
 
 	@Override
-	public Mono<Boolean> rateTechnicalSkills(String username, Map<String, Double> skillRating) {
+	public Mono<Boolean> reviewAndRateUser(String usernameReviewee, String usernameReviewer, Review review, Map<String, Double> skillRating, double punctuality) {
 		
-		// Instantiate MAX project count from database
-		setMaxProjectCount();
-		
-		// Update a user's technical skills rating and overall rating
-		return this.userService.getUser(username).map(user -> {
-			// Temp HashMaps storing current number of ratings for each skill and current average rating for each skill, respectively
-			Map<String, Integer> tempNumSkillRatings = user.getNumSkillRatings();
-			Map<String, Double> tempSkillStats = user.getSkillStats();
-			
-			// Temp variable that stores the sum of all the user's skill rating averages
-			double sumOfStats = 0.0d;
-			
-			// For every skill that a user has
-			for (String key : skillRating.keySet()) {
-				/*
-				 * user.getSkillRatings().get(key).add(skillRating.get(key));
-				 * double avg = user.getSkillRatings().get(key).stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-				 */
-				
-				// Increment the number of ratings for that skill
-				tempNumSkillRatings.put(key, tempNumSkillRatings.get(key) + 1);
-				// Calculate and update the new average rating for that skill
-				double avg = tempSkillStats.get(key) + (skillRating.get(key) - tempSkillStats.get(key))/tempNumSkillRatings.get(key);
-				tempSkillStats.put(key, avg);
-				
-				//Add the new average for that skill to the sum of all the user's skill rating averages
-				sumOfStats += avg;
-			}
-			// Update user
-			user.setNumSkillRatings(tempNumSkillRatings);
-			user.setSkillStats(tempSkillStats);
-			user.setTechnicalSkillAvg(((user.getProjectCount() / maxProjectCount) * 100 + sumOfStats)
-					/ (user.getSkillStats().size() + 1));
-			calculateOverallAverage(user.getUsername());
-			
-			this.userService.updateUser(user);
-			return true;
+		return getMaxMvpCount().flatMap( maxMvpCount -> {
+			return getMaxUniqueReviewersCount().flatMap(maxUniqueReviewersCount -> {
+				return getMaxProjectCount().flatMap(maxProjectCount -> {
+					
+					// Review the user (Reviewee)
+					return this.reviewService.addReview(usernameReviewee, usernameReviewer, review).flatMap(data -> {
+						// Update the user's technical skills rating and overall rating
+						return this.userService.getUser(usernameReviewee).map(user -> {
+							//Temp variables storing the updated punctuality count and updated punctuality average, respectively
+							int tempPunctualityCount = user.getPunctualityCount() + 1;
+							double tempPunctuality = user.getPunctuality()+(punctuality - user.getPunctuality())/tempPunctualityCount;
+							
+							// Instantiate MAX unique reviewers count from database
+							int tempmaxUniqueReviewersCount = maxUniqueReviewersCount;
+							if(tempmaxUniqueReviewersCount == 0) {
+								tempmaxUniqueReviewersCount = 1;
+							}
+							
+							// Instantiate MAX MVP count from database
+							int tempMaxMvpCount = maxMvpCount;
+							if(tempMaxMvpCount == 0) {
+								tempMaxMvpCount = 1;
+							}
+							
+							// Instantiate MAX project count from database
+							int tempMaxProjectCount = maxProjectCount;
+							if(tempMaxProjectCount == 0) {
+								tempMaxProjectCount = 1;
+							}
+							
+							
+							//Update the user's punctuality count, punctuality avg, and personal skills avg
+							user.setPunctualityCount(tempPunctualityCount);
+							user.setPunctuality(tempPunctuality);
+							user.setPersonalSkillAvg((user.getUniqueReviewersCount() / tempmaxUniqueReviewersCount) * 100 + tempPunctuality
+									+ (user.getMvpCount() / tempMaxMvpCount) * 100);
+						
+							
+							// Temp HashMaps storing current number of ratings for each skill and current average rating for each skill, respectively
+							Map<String, Integer> tempNumSkillRatings = user.getNumSkillRatings();
+							Map<String, Double> tempSkillStats = user.getSkillStats();
+							
+							// Temp variable that stores the sum of all the user's skill rating averages
+							double sumOfStats = 0.0d;
+							
+							// For every skill that the user has
+							for (String key : skillRating.keySet()) {
+								/*
+								 * user.getSkillRatings().get(key).add(skillRating.get(key));
+								 * double avg = user.getSkillRatings().get(key).stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+								 */
+								
+								// Increment the number of ratings for that skill
+								tempNumSkillRatings.put(key, tempNumSkillRatings.get(key) + 1);
+								// Calculate and update the new average rating for that skill
+								double avg = tempSkillStats.get(key) + (skillRating.get(key) - tempSkillStats.get(key))/tempNumSkillRatings.get(key);
+								tempSkillStats.put(key, avg);
+								
+								//Add the new average for that skill to the sum of all the user's skill rating averages
+								sumOfStats += avg;
+							}
+							// Update the user's technical skill stats and technical skills avg
+							user.setNumSkillRatings(tempNumSkillRatings);
+							user.setSkillStats(tempSkillStats);
+							user.setTechnicalSkillAvg(((user.getProjectCount() / tempMaxProjectCount) * 100 + sumOfStats)
+									/ (user.getSkillStats().size() + 1));
+							
+							// Update the user's overall rating
+							user.setOverallRating((user.getTechnicalSkillAvg() + user.getPersonalSkillAvg()) / 2);
+							
+							//Update the user
+							this.userService.updateUser(user);
+							return true;
+						});
+					});
+				});
+			});
 		});
 	}
 	
-	@Override
-	public Mono<Boolean> ratePersonalSkills(String username, double punctuality) {
-		// Instantiate MAX unique reviewers count from database
-		setMaxUniqueReviewersCount();
-		// Instantiate MAX MVP count from database
-		setMaxMvpCount();
-		
-		// Update a user's personal skills rating and overall rating
-		return this.userService.getUser(username).map(user -> {
-			//Temp variables storing the updated punctuality count and updated punctuality average, respectively
-			int tempPunctualityCount = user.getPunctualityCount() + 1;
-			double tempPunctuality = user.getPunctuality()+(punctuality - user.getPunctuality())/tempPunctualityCount;
-			
-			// Update user
-			user.setPunctualityCount(tempPunctualityCount);
-			user.setPunctuality(tempPunctuality);
-			user.setPersonalSkillAvg((user.getUniqueReviewersCount() / maxUniqueReviewersCount) * 100 + tempPunctuality
-					+ (user.getMvpCount() / maxMvpCount) * 100);
-			
-			calculateOverallAverage(user.getUsername());
-			
-			this.userService.updateUser(user);
-			return true;
+	private Mono<Integer> getMaxProjectCount(){
+		return this.userRepo.findFirstByOrderByProjectCountDesc().map(user -> {
+			return user.getProjectCount();
 		});
 	}
 	
-	private Mono<Boolean> calculateOverallAverage(String username) {
-		return this.userService.getUser(username).map(user -> {
-			user.setOverallRating((user.getTechnicalSkillAvg() + user.getPersonalSkillAvg()) / 2);
-			return true;
+	private Mono<Integer> getMaxMvpCount(){
+		return this.userRepo.findFirstByOrderByMvpCountDesc().map(user -> {
+			return user.getMvpCount();
 		});
 	}
 	
-	private void setMaxProjectCount(){
-		this.userRepo.findFirstByOrderByProjectCountDesc().map(user -> {
-			maxProjectCount = user.getProjectCount();
-			return null;
-		}).subscribe();
-	}
-	
-	private void setMaxMvpCount(){
-		this.userRepo.findFirstByOrderByMvpCountDesc().map(user -> {
-			maxMvpCount = user.getMvpCount();
-			return null;
-		}).subscribe();
-	}
-	
-	private void setMaxUniqueReviewersCount(){
-		this.userRepo.findFirstByOrderByUniqueReviewersCountDesc().map(user -> {
-			maxUniqueReviewersCount = user.getUniqueReviewersCount();
-			return null;
-		}).subscribe();
+	private Mono<Integer> getMaxUniqueReviewersCount(){
+		return this.userRepo.findFirstByOrderByUniqueReviewersCountDesc().map(user -> {
+			return user.getUniqueReviewersCount();
+			
+		});
 	}
 
 	
