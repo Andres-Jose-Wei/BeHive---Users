@@ -41,9 +41,9 @@ public class RatingServiceImpl implements RatingService {
 							double tempPunctuality = user.getPunctuality()+(punctuality - user.getPunctuality())/tempPunctualityCount;
 							
 							// Instantiate MAX unique reviewers count from database
-							int tempmaxUniqueReviewersCount = maxUniqueReviewersCount;
-							if(tempmaxUniqueReviewersCount == 0) {
-								tempmaxUniqueReviewersCount = 1;
+							int tempMaxUniqueReviewersCount = maxUniqueReviewersCount;
+							if(tempMaxUniqueReviewersCount == 0) {
+								tempMaxUniqueReviewersCount = 1;
 							}
 							
 							// Instantiate MAX MVP count from database
@@ -62,7 +62,7 @@ public class RatingServiceImpl implements RatingService {
 							//Update the user's punctuality count, punctuality avg, and personal skills avg
 							user.setPunctualityCount(tempPunctualityCount);
 							user.setPunctuality(tempPunctuality);
-							user.setPersonalSkillAvg((user.getUniqueReviewersCount() / tempmaxUniqueReviewersCount) * 100 + tempPunctuality
+							user.setPersonalSkillAvg((user.getUniqueReviewersCount() / tempMaxUniqueReviewersCount) * 100 + tempPunctuality
 									+ (user.getMvpCount() / tempMaxMvpCount) * 100);
 						
 							
