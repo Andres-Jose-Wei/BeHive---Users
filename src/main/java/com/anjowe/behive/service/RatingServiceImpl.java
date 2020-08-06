@@ -12,8 +12,6 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class RatingServiceImpl implements RatingService {
-	//private int maxMvpCount;
-	
 	private UserService userService;
 
 	private UserRepo userRepo;
@@ -28,16 +26,17 @@ public class RatingServiceImpl implements RatingService {
 
 	@Override
 	public Mono<Boolean> reviewAndRateUser(String usernameReviewee, String usernameReviewer, Review review, Map<String, Double> skillRating, double punctuality) {
-		
-		return getMaxMvpCount().flatMap( maxMvpCount -> {
+		// Review the user (the reviewee)
+		return this.reviewService.addReview(usernameReviewee, usernameReviewer, review).flatMap(data -> {
+			// Retrieve MAX unique reviewers count, MAX project count, and MAX MVP count from database
 			return getMaxUniqueReviewersCount().flatMap(maxUniqueReviewersCount -> {
 				return getMaxProjectCount().flatMap(maxProjectCount -> {
-					
-					// Review the user (Reviewee)
-					return this.reviewService.addReview(usernameReviewee, usernameReviewer, review).flatMap(data -> {
-						// Update the user's technical skills rating and overall rating
+					return getMaxMvpCount().flatMap( maxMvpCount -> {
+						
+						// Now, update the user's technical skills rating, personal skills rating and, thus, overall rating
 						return this.userService.getUser(usernameReviewee).map(user -> {
-							//Temp variables storing the updated punctuality count and updated punctuality average, respectively
+							
+							// Temp variables storing the updated punctuality count and updated punctuality average, respectively
 							int tempPunctualityCount = user.getPunctualityCount() + 1;
 							double tempPunctuality = user.getPunctuality()+(punctuality - user.getPunctuality())/tempPunctualityCount;
 							
@@ -76,10 +75,6 @@ public class RatingServiceImpl implements RatingService {
 							
 							// For every skill that the user has
 							for (String key : skillRating.keySet()) {
-								/*
-								 * user.getSkillRatings().get(key).add(skillRating.get(key));
-								 * double avg = user.getSkillRatings().get(key).stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-								 */
 								
 								// Increment the number of ratings for that skill
 								tempNumSkillRatings.put(key, tempNumSkillRatings.get(key) + 1);
@@ -90,7 +85,7 @@ public class RatingServiceImpl implements RatingService {
 								//Add the new average for that skill to the sum of all the user's skill rating averages
 								sumOfStats += avg;
 							}
-							// Update the user's technical skill stats and technical skills avg
+							// Update the user's technical skill stats and technical skills avg rating
 							user.setNumSkillRatings(tempNumSkillRatings);
 							user.setSkillStats(tempSkillStats);
 							user.setTechnicalSkillAvg(((user.getProjectCount() / tempMaxProjectCount) * 100 + sumOfStats)
